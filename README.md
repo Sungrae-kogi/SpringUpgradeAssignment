@@ -11,4 +11,4 @@
 | 특정 일정 삭제 | DELETE | /api/schedule/{scheduleid} | 요청 param |  |
 
 ## ERD
-![1.png](..%2F..%2F1.png)
+![1](https://github.com/user-attachments/assets/6946a71a-e63f-4159-8d99-b77946b98ef1)
