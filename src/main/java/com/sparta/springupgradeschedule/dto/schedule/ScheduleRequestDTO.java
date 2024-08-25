@@ -1,4 +1,4 @@
-package com.sparta.springupgradeschedule.dto;
+package com.sparta.springupgradeschedule.dto.schedule;
 
 import lombok.Getter;
 

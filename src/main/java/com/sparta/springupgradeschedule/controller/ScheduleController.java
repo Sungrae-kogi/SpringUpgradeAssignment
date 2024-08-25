@@ -1,9 +1,8 @@
 package com.sparta.springupgradeschedule.controller;
 
-import com.sparta.springupgradeschedule.dto.ScheduleRequestDTO;
-import com.sparta.springupgradeschedule.dto.ScheduleResponseDTO;
+import com.sparta.springupgradeschedule.dto.schedule.ScheduleRequestDTO;
+import com.sparta.springupgradeschedule.dto.schedule.ScheduleResponseDTO;
 import com.sparta.springupgradeschedule.service.ScheduleService;
-import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -24,7 +23,7 @@ public class ScheduleController {
 
     // 스케쥴 단건 조회
     @GetMapping("/schedules/{id}")
-    public ScheduleResponseDTO getSchedule(@PathVariable Long id){
+    public ScheduleResponseDTO getSchedule(@PathVariable Long id) {
         return scheduleService.getSchedule(id);
     }
 
