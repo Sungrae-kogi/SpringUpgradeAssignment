@@ -1,3 +1,4 @@
+create database schedules;
 create table schedules (
     schedule_id bigint not null auto_increment,
     created_at datetime(6),
