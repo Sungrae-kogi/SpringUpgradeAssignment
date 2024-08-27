@@ -18,8 +18,8 @@ class ScheduleRepositoryTest {
     public void createSchedule(){
         Schedule schedule = new Schedule();
         schedule.setUsername("sungrae");
-        schedule.setTitle("스케쥴제목");
-        schedule.setContents("스케쥴 내용");
+        schedule.setTitle("오늘");
+        schedule.setContents("스케쥴 내용2");
 
         //Schedule 반환.
         //findBy~~~ 식으로 사용하는 경우 Optional타입을 반환한다고 하는 부분 찾아보기.
@@ -44,6 +44,7 @@ class ScheduleRepositoryTest {
         System.out.println(schedule.getUsername());
         System.out.println(schedule.getCreatedAt());
     }
+
 
     @Test
     @Transactional
