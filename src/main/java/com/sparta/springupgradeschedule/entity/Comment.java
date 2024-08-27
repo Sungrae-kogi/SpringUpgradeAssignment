@@ -5,11 +5,13 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 @Table(name = "comments")
 public class Comment extends Timestamped {
     @Id
@@ -26,9 +28,8 @@ public class Comment extends Timestamped {
     @JoinColumn(name = "schedule_id")
     private Schedule schedule;
 
-    public Comment(CommentRequestDTO commentRequestDTO, Schedule schedule) {
+    public Comment(CommentRequestDTO commentRequestDTO) {
         this.comment = commentRequestDTO.getComment();
         this.username = commentRequestDTO.getUsername();
-        this.schedule = schedule;
     }
 }
