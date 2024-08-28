@@ -4,7 +4,9 @@ import com.sparta.springupgradeschedule.dto.schedule.SchedulePageListResponseDTO
 import com.sparta.springupgradeschedule.dto.schedule.ScheduleRequestDTO;
 import com.sparta.springupgradeschedule.dto.schedule.ScheduleResponseDTO;
 import com.sparta.springupgradeschedule.entity.Schedule;
+import com.sparta.springupgradeschedule.entity.User;
 import com.sparta.springupgradeschedule.repository.ScheduleRepository;
+import com.sparta.springupgradeschedule.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -13,16 +15,24 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
+    private final UserRepository userRepository;
 
-    public ScheduleService(ScheduleRepository scheduleRepository) {
+    public ScheduleService(ScheduleRepository scheduleRepository, UserRepository userRepository) {
         this.scheduleRepository = scheduleRepository;
+        this.userRepository = userRepository;
     }
 
-    public ScheduleResponseDTO createSchedule(ScheduleRequestDTO scheduleRequestDTO) {
+    public ScheduleResponseDTO createSchedule(Long userId, ScheduleRequestDTO scheduleRequestDTO) {
+        // userId User 검색
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("해당 id값을 가진 유저 데이터가 존재하지 않습니다."));
+
         // RequestDto -> Entity
         Schedule schedule = new Schedule(scheduleRequestDTO);
 
-        // DB 저장     저장 전 존재 유무 확인 작업 추가 가능
+        // User가 Schedule을 생성.
+        schedule.addUser(user);
+
+        // DB 저장
         Schedule saveSchedule = scheduleRepository.save(schedule);
 
         // Entity -> ResponseDTO
@@ -31,11 +41,11 @@ public class ScheduleService {
         return scheduleResponseDTO;
     }
 
-    public ScheduleResponseDTO getSchedule(Long id) {
+    public ScheduleResponseDTO getSchedule(Long scheduleId) {
         // Schedule 검색      검색 이전에 id를 가진 Schedule이 존재하는지 여부 확인 작업 추가 가능    ** 단일 검색기능은 update에서도 공통으로 쓰이므로 함수로 따로 빼도될것.
         // .get()의 경우 결과값이 null일 경우 NoSuchElementException 발생
         // .orElseThrow() 값이 존재하면 반환하고, 없는 경우 지정된 예외를 반환.
-        Schedule schedule = findById(id);
+        Schedule schedule = findByScheduleId(scheduleId);
 
         // Entity -> ResponseDTO
         return new ScheduleResponseDTO(schedule);
@@ -72,30 +82,51 @@ public class ScheduleService {
         return schedulePage.map(SchedulePageListResponseDTO::new);
     }
 
-    public ScheduleResponseDTO updateSchedule(Long id, ScheduleRequestDTO scheduleRequestDTO) {
+    public ScheduleResponseDTO updateSchedule(Long scheduleId, ScheduleRequestDTO scheduleRequestDTO) {
         // Schedule 검색      존재 유무 확인작업 추가 필요.
-        Schedule schedule = findById(id);
+        Schedule schedule = findByScheduleId(scheduleId);
         // schedule 변수가 내용이 있을때 -> RequestDTO 내용 반영 -> save()
         schedule.setContents(scheduleRequestDTO.getContents());
         schedule.setTitle(scheduleRequestDTO.getTitle());
-        schedule.setUsername(scheduleRequestDTO.getUsername());
         Schedule updatedSchedule = scheduleRepository.save(schedule);
 
         // Entity -> ResponseDTO
         return new ScheduleResponseDTO(updatedSchedule);
     }
 
+    // 일정과 연관있는 유저를 추후에 배치하도록 구현
+    public ScheduleResponseDTO addUserToSchedule(Long scheduleId, Long userId) {
+        // Schedule 검색
+        Schedule schedule = findByScheduleId(scheduleId);
 
-    public void deleteSchedule(Long id) {
+        // User 검색
+        User user = findByUserId(userId);
+
+        // Schedule에 User 배치
+        schedule.addUser(user);
+
+        // Entity -> ResponseDTO
+        return new ScheduleResponseDTO(schedule);
+    }
+
+
+    public void deleteSchedule(Long scheduleId) {
         // Schedule 검색      존재 유무 확인작업 추가 필요.
-        Schedule schedule = findById(id);
+        Schedule schedule = findByScheduleId(scheduleId);
 
         scheduleRepository.delete(schedule);
     }
 
 
     // scheduleId 값 -> Schedule 객체 반환.
-    public Schedule findById(Long id) {
-        return scheduleRepository.findById(id).orElseThrow(() -> new RuntimeException("해당 id값을 가진 스케쥴 데이터가 존재하지 않습니다."));
+    public Schedule findByScheduleId(Long scheduleId) {
+        return scheduleRepository.findById(scheduleId).orElseThrow(() -> new RuntimeException("해당 id값을 가진 스케쥴 데이터가 존재하지 않습니다."));
     }
+
+    // userId 값 -> User 객체 반환.
+    public User findByUserId(Long userId) {
+        return userRepository.findById(userId).orElseThrow(() -> new RuntimeException("해당 id값을 가진 유저 데이터가 존재하지 않습니다."));
+    }
+
+
 }

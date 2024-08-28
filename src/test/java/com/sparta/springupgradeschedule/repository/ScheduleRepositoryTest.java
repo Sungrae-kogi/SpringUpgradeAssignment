@@ -1,32 +1,46 @@
 package com.sparta.springupgradeschedule.repository;
 
+import com.sparta.springupgradeschedule.dto.schedule.ScheduleResponseDTO;
 import com.sparta.springupgradeschedule.entity.Schedule;
+import com.sparta.springupgradeschedule.entity.User;
+import com.sparta.springupgradeschedule.entity.UserSchedule;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @SpringBootTest
 class ScheduleRepositoryTest {
     @Autowired
     ScheduleRepository scheduleRepository;
+    @Autowired
+    UserRepository userRepository;
 
     @Test
     @Transactional
     @Rollback(value = false)
     public void createSchedule(){
+        // userId User 검색
+        User user = userRepository.findById(2L).orElseThrow(() -> new RuntimeException("해당 id값을 가진 유저 데이터가 존재하지 않습니다."));
+
+        // RequestDto -> Entity
         Schedule schedule = new Schedule();
-        schedule.setUsername("sungrae");
-        schedule.setTitle("오늘");
-        schedule.setContents("스케쥴 내용2");
+        schedule.setTitle("새벽제목");
+        schedule.setContents("과제5단계왜이럼");
 
-        //Schedule 반환.
-        //findBy~~~ 식으로 사용하는 경우 Optional타입을 반환한다고 하는 부분 찾아보기.
-        Schedule result = scheduleRepository.save(schedule);
+        // User가 Schedule을 생성.
+        schedule.addUser(user);
 
-        System.out.println(result.getUsername());
-        System.out.println(result.getSchedule_id());
+        // DB 저장
+        Schedule savedSchedule = scheduleRepository.save(schedule);
+
+        List<UserSchedule> userSchedules = savedSchedule.getUserSchedules();
+        for(UserSchedule userSchedule : userSchedules){
+            System.out.println("userSchedule : " + userSchedule);
+        }
     }
 
     @Test
@@ -41,7 +55,6 @@ class ScheduleRepositoryTest {
         System.out.println(schedule.getSchedule_id());
         System.out.println(schedule.getContents());
         System.out.println(schedule.getTitle());
-        System.out.println(schedule.getUsername());
         System.out.println(schedule.getCreatedAt());
     }
 
@@ -53,7 +66,6 @@ class ScheduleRepositoryTest {
         //param : id, body : username, title, contents
         Schedule schedule = scheduleRepository.findById(4L).orElseThrow(() -> new RuntimeException("해당 id값을 가진 데이터가 존재하지 않습니다."));
 
-        schedule.setUsername("chosung");
         schedule.setTitle("수정된 제목");
         schedule.setContents("수정된 내용");
 
@@ -62,10 +74,32 @@ class ScheduleRepositoryTest {
 
         //수정되고 반환받은 값 출력 및 확인
         System.out.println(updatedSchedule.getSchedule_id());
-        System.out.println(updatedSchedule.getUsername());
         System.out.println(updatedSchedule.getTitle());
         System.out.println(updatedSchedule.getContents());
     }
+
+    @Test
+    @Transactional
+    @Rollback(value = false)
+    public void addUserToSchedule(){
+        // Schedule 검색  3번스케쥴에다가 유저를 배치
+        Schedule schedule = scheduleRepository.findById(3L).orElseThrow(() -> new RuntimeException("해당 id값을 가진 데이터가 존재하지 않습니다."));
+
+
+        // User 검색
+        User user = userRepository.findById(1L).orElseThrow(() -> new RuntimeException("해당 id값을 가진 데이터가 존재하지 않습니다."));
+
+        // Schedule에 User 배치
+        schedule.addUser(user);
+    
+        // 출력 확인
+        List<UserSchedule> userSchedules = schedule.getUserSchedules();
+        for(UserSchedule userSchedule : userSchedules){
+            System.out.println("userSchedule : " + userSchedule);
+        }
+    }
+
+
 
     @Test
     @Transactional

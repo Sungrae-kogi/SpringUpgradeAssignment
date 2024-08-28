@@ -3,23 +3,37 @@
 🏁 **Goal:  "JPA를 활용한 upgrade 일정 관리 앱 서버 만들기"**
 
 ## 🆘 API 명세서 - JPA를 활용한 upgrade 일정 관리 앱 서버
-### Schedule 
-| 기능 | Method | URL | Request | Response |
-| --- | --- | --- | --- | --- |
-| 일정 등록 | POST | /api/schedule | 요청 body | 등록 정보 |
-| 특정 일정 조회 | GET | /api/schedule/{scheduleid} | 요청 Param | 응답 정보 |
-| 특정 일정 변경 | PUT | /api/schedule/{scheduleid} | 요청 body | 변경 정보 |
-| 특정 일정 삭제 | DELETE | /api/schedule/{scheduleid} | 요청 param |  |
+
+### Schedule
+
+| 기능          | Method | URL                                 | Request  | Response |
+|-------------|--------|-------------------------------------|----------|----------|
+| 일정 등록       | POST   | /api/schedule/{userId}              | 요청 body  | 등록 정보    |
+| 특정 일정 조회    | GET    | /api/schedule/{scheduleid}          | 요청 Param | 응답 정보    |
+| 일정 전체 조회    | GET    | /api/schedule                       | 요청 Param | 응답 정보    |
+| 특정 일정 변경    | PUT    | /api/schedule/{scheduleid}          | 요청 body  | 변경 정보    |
+| 특정 일정 유저 추가 | PUT    | /api/schedule/{scheduleid}/{userId} | 요청 Param | 응답 정보    |
+| 특정 일정 삭제    | DELETE | /api/schedule/{scheduleid}          | 요청 param |          |
 
 ### Comment
-| 기능       | Method | URL                                    | Request | Response |
-|----------|--------|----------------------------------------| --- | --- |
-| 댓글 등록    | POST   | /api/schedule/{scheduleid}             | 요청 body | 등록 정보 |
-| 전체 댓글 조회 | GET    | /api/schedule/{scheduleid}             | 요청 body | 등록 정보 |
-| 특정 댓글 조회 | GET    | /api/schedule/{scheduleid}/{commentid} | 요청 Param | 응답 정보 |
-| 특정 댓글 변경 | PUT    | /api/schedule/{scheduleid}/{commentid} | 요청 body | 변경 정보 |
-| 특정 일정 삭제 | DELETE | /api/schedule/{scheduleid}/{commentid} | 요청 param |  |
 
+| 기능       | Method | URL                                    | Request  | Response |
+|----------|--------|----------------------------------------|----------|----------|
+| 댓글 등록    | POST   | /api/schedule/{scheduleid}             | 요청 body  | 등록 정보    |
+| 전체 댓글 조회 | GET    | /api/schedule/{scheduleid}             | 요청 body  | 등록 정보    |
+| 특정 댓글 조회 | GET    | /api/schedule/{scheduleid}/{commentid} | 요청 Param | 응답 정보    |
+| 특정 댓글 변경 | PUT    | /api/schedule/{scheduleid}/{commentid} | 요청 body  | 변경 정보    |
+| 특정 일정 삭제 | DELETE | /api/schedule/{scheduleid}/{commentid} | 요청 param |          |
+
+### User
+
+| 기능       | Method | URL                 | Request  | Response |
+|----------|--------|---------------------|----------|----------|
+| 유저 등록    | POST   | /api/users          | 요청 body  | 등록 정보    |
+| 특정 유저 조회 | GET    | /api/users/{userId} | 요청 Param | 응답 정보    |
+| 유저 전체 조회 | GET    | /api/users          | 요청 Param | 응답 정보    |
+| 특정 유저 삭제 | DELETE | /api/users/{userId} | 요청 param |          |
 
 ## ERD
-![2](https://github.com/user-attachments/assets/46794f3d-36cf-482f-95e6-1fa38a12ff95)
+
+![3](https://github.com/user-attachments/assets/fe8b4abe-ae95-4327-a466-765209a35ab5)

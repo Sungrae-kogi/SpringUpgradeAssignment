@@ -19,7 +19,6 @@ class ScheduleTest {
     @DisplayName("스케쥴 생성")
     void createScheduleTest() {
         Schedule schedule = new Schedule();
-        schedule.setUsername("sungrae2");
         schedule.setTitle("할일 제목");
         schedule.setContents("할일 내용");
         em.persist(schedule);  // 영속성 컨텍스트에 메모 Entity 객체를 저장합니다.

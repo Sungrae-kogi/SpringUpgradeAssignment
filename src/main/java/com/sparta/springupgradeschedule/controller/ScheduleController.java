@@ -22,17 +22,17 @@ public class ScheduleController {
         this.scheduleService = scheduleService;
     }
 
-    // 스케쥴 저장
-    @PostMapping
-    public ScheduleResponseDTO createSchedule(@RequestBody ScheduleRequestDTO scheduleRequestDTO) {
+    // 스케쥴 저장   - 스케쥴이 유저 고유식별자를 가지므로 생성시 정보가 필요함.
+    @PostMapping("/{userId}")
+    public ScheduleResponseDTO createSchedule(@PathVariable Long userId, @RequestBody ScheduleRequestDTO scheduleRequestDTO) {
         //요청 body Message -> RequestDTO 변환 및 scheduleService 전달.
-        return scheduleService.createSchedule(scheduleRequestDTO);
+        return scheduleService.createSchedule(userId, scheduleRequestDTO);
     }
 
     // 스케쥴 단건 조회
-    @GetMapping("/{id}")
-    public ScheduleResponseDTO getSchedule(@PathVariable Long id) {
-        return scheduleService.getSchedule(id);
+    @GetMapping("/{scheduleId}")
+    public ScheduleResponseDTO getSchedule(@PathVariable Long scheduleId) {
+        return scheduleService.getSchedule(scheduleId);
     }
 
     // 스케쥴 전체 조회 - Pageable 적용 디폴트 페이지 크기 = 10
@@ -47,15 +47,23 @@ public class ScheduleController {
     }
 
     // 스케쥴 수정
-    @PutMapping("/{id}")
-    public ScheduleResponseDTO updateSchedule(@PathVariable Long id, @RequestBody ScheduleRequestDTO scheduleRequestDTO) {
-        return scheduleService.updateSchedule(id, scheduleRequestDTO);
+    @PutMapping("/{scheduleId}")
+    public ScheduleResponseDTO updateSchedule(@PathVariable Long scheduleId, @RequestBody ScheduleRequestDTO scheduleRequestDTO) {
+        return scheduleService.updateSchedule(scheduleId, scheduleRequestDTO);
     }
 
+    // 스케쥴 생성 이후 해당 스케쥴에 다른 유저 추가로 배치
+    @PutMapping("/{scheduleId}/{userId}")
+    public ScheduleResponseDTO addUserToSchedule(@PathVariable Long scheduleId, @PathVariable Long userId){
+        return scheduleService.addUserToSchedule(scheduleId, userId);
+    }
+
+
+
     // 스케쥴 삭제
-    @DeleteMapping("/{id}")
-    public void deleteSchedule(@PathVariable Long id) {
-        scheduleService.deleteSchedule(id);
+    @DeleteMapping("/{scheduleId}")
+    public void deleteSchedule(@PathVariable Long scheduleId) {
+        scheduleService.deleteSchedule(scheduleId);
     }
 
 }
