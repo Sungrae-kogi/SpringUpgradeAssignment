@@ -23,7 +23,7 @@ public class CommentService {
 
     public CommentResponseDTO createComment(Long scheduleId, CommentRequestDTO commentRequestDTO) {
         // scheduleId 값으로 Schedule 검색
-        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(() -> new RuntimeException("해당 id값을 가진 스케쥴 데이터가 존재하지 않습니다."));
+        Schedule schedule = findById(scheduleId);
 
         // DTO -> Entity
         Comment comment = new Comment(commentRequestDTO);
@@ -39,14 +39,8 @@ public class CommentService {
     }
 
     public CommentResponseDTO getComment(Long scheduleId, Long commentId) {
-        // scheduleId 값으로 Schedule 검색
-        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(() -> new RuntimeException("해당 id값을 가진 스케쥴 데이터가 존재하지 않습니다."));
-
-        // 검색한 Schedule의 comments에 commentId값으로 Comment 검색
-        List<Comment> commentsInSchedule = schedule.getComments();
-        Comment comment = commentsInSchedule.stream().filter(c -> c.getComment_id().equals(commentId))
-                .findFirst().orElseThrow(() -> new RuntimeException("해당 id값을 가진 댓글 데이터가 존재하지 않습니다."));
-
+        // Schedule_Id, Comment_ID 로 Comment객체 검색.
+        Comment comment = findByScheduleIdAndCommentId(scheduleId, commentId);
 
         // 검색 성공 -> DTO 반환
         return new CommentResponseDTO(comment);
@@ -55,7 +49,7 @@ public class CommentService {
 
     public List<CommentResponseDTO> getAllComments(Long scheduleId) {
         // scheduleId 값으로 Schedule 검색
-        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(() -> new RuntimeException("해당 id값을 가진 스케쥴 데이터가 존재하지 않습니다."));
+        Schedule schedule = findById(scheduleId);
 
         // 검색한 Schedule의 Comments 리스트
         List<Comment> commentsInSchedule = schedule.getComments();
@@ -68,13 +62,8 @@ public class CommentService {
     }
 
     public CommentResponseDTO updateComment(Long scheduleId, Long commentId, CommentRequestDTO commentRequestDTO) {
-        // scheduleId 값으로 Schedule 검색
-        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(() -> new RuntimeException("해당 id값을 가진 스케쥴 데이터가 존재하지 않습니다."));
-
-        // 검색한 Schedule의 comments에 commentId값으로 Comment 검색
-        List<Comment> commentsInSchedule = schedule.getComments();
-        Comment comment = commentsInSchedule.stream().filter(c -> c.getComment_id().equals(commentId))
-                .findFirst().orElseThrow(() -> new RuntimeException("해당 id값을 가진 댓글 데이터가 존재하지 않습니다."));
+        // Schedule_Id, Comment_ID 로 Comment객체 검색.
+        Comment comment = findByScheduleIdAndCommentId(scheduleId, commentId);
 
         // 변경 내용 반영     -> 검색해온 comment와 비교해서 DirtyChecking이 발생하여 자동으로 save()시에 update문이 발생.
         comment.setUsername(commentRequestDTO.getUsername());
@@ -85,15 +74,25 @@ public class CommentService {
     }
 
     public void deleteComment(Long scheduleId, Long commentId) {
+        // Schedule_Id, Comment_ID 로 Comment객체 검색.
+        Comment comment = findByScheduleIdAndCommentId(scheduleId, commentId);
+        // comment 삭제 리턴타입 void
+        commentRepository.delete(comment);
+    }
+
+    // Schedule_id 값 -> Schedule 객체 반환.
+    public Schedule findById(Long scheduleId) {
+        return scheduleRepository.findById(scheduleId).orElseThrow(() -> new RuntimeException("해당 id값을 가진 스케쥴 데이터가 존재하지 않습니다."));
+    }
+
+    // Schedule_id 값, Comment_id 값 -> Comment 객체 반환.
+    public Comment findByScheduleIdAndCommentId(Long scheduleId, Long commentId) {
         // scheduleId 값으로 Schedule 검색
         Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(() -> new RuntimeException("해당 id값을 가진 스케쥴 데이터가 존재하지 않습니다."));
 
         // 검색한 Schedule의 comments에 commentId값으로 Comment 검색
         List<Comment> commentsInSchedule = schedule.getComments();
-        Comment comment = commentsInSchedule.stream().filter(c -> c.getComment_id().equals(commentId))
+        return commentsInSchedule.stream().filter(c -> c.getComment_id().equals(commentId))
                 .findFirst().orElseThrow(() -> new RuntimeException("해당 id값을 가진 댓글 데이터가 존재하지 않습니다."));
-
-        // comment 삭제 리턴타입 void
-        commentRepository.delete(comment);
     }
 }

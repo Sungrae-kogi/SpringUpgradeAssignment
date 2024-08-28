@@ -31,7 +31,7 @@ public class Schedule extends Timestamped {
     private String contents;
 
     //외래키 comment_id가 comment엔티티에 있으므로 연관관계의 주인은 Comment, mappedBy는 Comment에 있는 schedule
-    @OneToMany(mappedBy = "schedule")
+    @OneToMany(mappedBy = "schedule", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<Comment> comments = new ArrayList<>();
 
     public Schedule(ScheduleRequestDTO scheduleRequestDTO) {

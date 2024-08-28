@@ -26,12 +26,12 @@ class CommentRepositoryTest {
     @Transactional
     @Rollback(value = false)
     public void createComment() {
-        //테스트용 id : 2 를 가진 Schedule이 존재하는 상태.
-        Schedule schedule = scheduleRepository.findById(2L).get();
+        //테스트용 id : 3 를 가진 Schedule이 존재하는 상태.
+        Schedule schedule = scheduleRepository.findById(3L).get();
         System.out.println("Schedule Comment 확인 : " + schedule.getComments().size());
 
         Comment comment = new Comment();
-        comment.setComment("두번째 댓글");
+        comment.setComment("schedule_3 에 대한 코멘트");
         comment.setUsername("작성자명2");
         comment.setSchedule(schedule);
 
@@ -40,7 +40,7 @@ class CommentRepositoryTest {
 
         //Comment 저장
         Comment result = commentRepository.save(comment);               //relation이 제대로 잡혀있으면, 여기 한줄로 가능.
-        Schedule savedSchedule = scheduleRepository.findById(2L).get(); //scheduleRepository.save(schedule);
+        Schedule savedSchedule = scheduleRepository.findById(3L).get(); //scheduleRepository.save(schedule);
 
         //Comment 출력
         System.out.println("Comment 내용 : " + result.getComment());
@@ -61,7 +61,7 @@ class CommentRepositoryTest {
         //이 Comment 정보를 Get하는 테스트
 
         // scheduleId 값으로 Schedule 검색
-        Schedule schedule = scheduleRepository.findById(2L).orElseThrow(() -> new RuntimeException("해당 id값을 가진 스케쥴 데이터가 존재하지 않습니다."));
+        Schedule schedule = scheduleRepository.findById(3L).orElseThrow(() -> new RuntimeException("해당 id값을 가진 스케쥴 데이터가 존재하지 않습니다."));
 
         // 검색한 Schedule의 comments에 commentId값으로 Comment 검색
         List<Comment> commentsInSchedule = schedule.getComments();

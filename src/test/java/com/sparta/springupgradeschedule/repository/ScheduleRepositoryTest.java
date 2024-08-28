@@ -51,9 +51,9 @@ class ScheduleRepositoryTest {
     @Rollback
     public void updateSchedule(){
         //param : id, body : username, title, contents
-        Schedule schedule = scheduleRepository.findById(2L).orElseThrow(() -> new RuntimeException("해당 id값을 가진 데이터가 존재하지 않습니다."));
+        Schedule schedule = scheduleRepository.findById(4L).orElseThrow(() -> new RuntimeException("해당 id값을 가진 데이터가 존재하지 않습니다."));
 
-        schedule.setUsername("작성자 명");
+        schedule.setUsername("chosung");
         schedule.setTitle("수정된 제목");
         schedule.setContents("수정된 내용");
 
@@ -65,5 +65,15 @@ class ScheduleRepositoryTest {
         System.out.println(updatedSchedule.getUsername());
         System.out.println(updatedSchedule.getTitle());
         System.out.println(updatedSchedule.getContents());
+    }
+
+    @Test
+    @Transactional
+    @Rollback(value = false)
+    public void deleteSchedule(){
+        //schedule 2를 지우면, 연관 comment 가 삭제
+        Schedule schedule = scheduleRepository.findById(2L).orElseThrow(() -> new RuntimeException("해당 id값을 가진 데이터가 존재하지 않습니다."));
+
+        scheduleRepository.delete(schedule);
     }
 }
