@@ -3,14 +3,20 @@ package com.sparta.springupgradeschedule.service;
 import com.sparta.springupgradeschedule.dto.schedule.SchedulePageListResponseDTO;
 import com.sparta.springupgradeschedule.dto.schedule.ScheduleRequestDTO;
 import com.sparta.springupgradeschedule.dto.schedule.ScheduleResponseDTO;
+import com.sparta.springupgradeschedule.dto.user.UserResponseDTO;
+import com.sparta.springupgradeschedule.dto.user.UserSmallResponseDTO;
 import com.sparta.springupgradeschedule.entity.Schedule;
 import com.sparta.springupgradeschedule.entity.User;
+import com.sparta.springupgradeschedule.entity.UserSchedule;
 import com.sparta.springupgradeschedule.repository.ScheduleRepository;
 import com.sparta.springupgradeschedule.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ScheduleService {
@@ -47,8 +53,12 @@ public class ScheduleService {
         // .orElseThrow() 값이 존재하면 반환하고, 없는 경우 지정된 예외를 반환.
         Schedule schedule = findByScheduleId(scheduleId);
 
+        // 유저 정보 지연로딩설정했으므로 직접부여 : 고유식별자, 유저명, 이메일
+        List<UserSmallResponseDTO> users = schedule.getUserSchedules().stream().map(userSchedule -> new UserSmallResponseDTO(userSchedule.getUser())).collect(Collectors.toList());
+
+
         // Entity -> ResponseDTO
-        return new ScheduleResponseDTO(schedule);
+        return new ScheduleResponseDTO(schedule, users);
     }
 
     /**

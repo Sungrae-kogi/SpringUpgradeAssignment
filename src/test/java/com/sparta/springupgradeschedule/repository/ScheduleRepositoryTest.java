@@ -1,6 +1,7 @@
 package com.sparta.springupgradeschedule.repository;
 
 import com.sparta.springupgradeschedule.dto.schedule.ScheduleResponseDTO;
+import com.sparta.springupgradeschedule.dto.user.UserSmallResponseDTO;
 import com.sparta.springupgradeschedule.entity.Schedule;
 import com.sparta.springupgradeschedule.entity.User;
 import com.sparta.springupgradeschedule.entity.UserSchedule;
@@ -11,6 +12,7 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @SpringBootTest
 class ScheduleRepositoryTest {
@@ -24,7 +26,7 @@ class ScheduleRepositoryTest {
     @Rollback(value = false)
     public void createSchedule(){
         // userId User 검색
-        User user = userRepository.findById(2L).orElseThrow(() -> new RuntimeException("해당 id값을 가진 유저 데이터가 존재하지 않습니다."));
+        User user = userRepository.findById(1L).orElseThrow(() -> new RuntimeException("해당 id값을 가진 유저 데이터가 존재하지 않습니다."));
 
         // RequestDto -> Entity
         Schedule schedule = new Schedule();
@@ -50,12 +52,20 @@ class ScheduleRepositoryTest {
         // id key값으로 검색 - 현재 id = 4인 test DB가 들어가있는상태.
         // .get()의 경우 결과값이 null일 경우 NoSuchElementException 발생   https://velog.io/@aidenshin/Optional-%EA%B4%80%EB%A0%A8..
         // .orElseThrow()로 값이 null일 경우 지정한 예외를 발생시켜줄 수 있음.
-        Schedule schedule = scheduleRepository.findById(4L).orElseThrow(() -> new RuntimeException("해당 id값을 가진 데이터가 존재하지 않습니다."));
+        Schedule schedule = scheduleRepository.findById(1L).orElseThrow(() -> new RuntimeException("해당 id값을 가진 데이터가 존재하지 않습니다."));
 
-        System.out.println(schedule.getSchedule_id());
-        System.out.println(schedule.getContents());
-        System.out.println(schedule.getTitle());
-        System.out.println(schedule.getCreatedAt());
+        List<UserSmallResponseDTO> users = schedule.getUserSchedules().stream().map(userSchedule -> new UserSmallResponseDTO(userSchedule.getUser())).collect(Collectors.toList());
+
+
+
+        System.out.println(schedule);
+        System.out.println("------일정 조회시 담당 유저들의 고유 식별자, 유저명, 이메일 즉시로딩 테스트 ------");
+        for(UserSmallResponseDTO user : users){
+            System.out.println("user_id : " + user.getUser_id());
+            System.out.println("username : " + user.getUsername());
+            System.out.println("email : "+ user.getEmail());
+
+        }
     }
 
 
