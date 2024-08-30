@@ -21,7 +21,7 @@ class UserRepositoryTest {
 
         // RequestDTO -> Entity
         User user = new User();
-        user.setUsername("collaborator");
+        user.setUsername("developer");
         user.setEmail("whtjdfo@gmail.com");
 
         // DB 저장

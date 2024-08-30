@@ -27,6 +27,11 @@ public class Schedule extends Timestamped {
     @Column(nullable = false)
     private String contents;
 
+    // 일정 자체에 대한 담당자    - 즉시로딩이 기본값이므로 지연로딩으로.
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
     // @~~Many로 끝나는것은 기본값이 지연로딩, @~~One으로 끝나는것은 기본값이 즉시로딩
     // 단건조회시 유저정보 즉시로딩, 전체조회시 지연로딩
 
@@ -38,16 +43,14 @@ public class Schedule extends Timestamped {
     @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<UserSchedule> userSchedules = new ArrayList<>();
 
-    public Schedule(ScheduleRequestDTO scheduleRequestDTO) {
+
+    // 일정 생성시에는 일정을 생성한 담당자와 일정에 대한 정보가 들어와야함.
+    public Schedule(User createUser, ScheduleRequestDTO scheduleRequestDTO) {
         this.title = scheduleRequestDTO.getTitle();
         this.contents = scheduleRequestDTO.getContents();
+        this.user = createUser;
     }
 
-    public void addComment(Comment comment) {
-        comments.add(comment);
-        //Comment를 추가해주면서 comment 자체에 외래키도 설정해줌.
-        comment.setSchedule(this);
-    }
 
     // 일정과 관련된 사용자가 입력될 경우, 중간다리 테이블객체로 저장.
     public void addUser(User user) {

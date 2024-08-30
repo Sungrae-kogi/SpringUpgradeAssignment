@@ -8,6 +8,8 @@ import com.sparta.springupgradeschedule.dto.user.UserSmallResponseDTO;
 import com.sparta.springupgradeschedule.entity.Schedule;
 import com.sparta.springupgradeschedule.entity.User;
 import com.sparta.springupgradeschedule.entity.UserSchedule;
+import com.sparta.springupgradeschedule.exception.ScheduleNotFoundByIdException;
+import com.sparta.springupgradeschedule.exception.UserNotFoundByIdException;
 import com.sparta.springupgradeschedule.repository.ScheduleRepository;
 import com.sparta.springupgradeschedule.repository.UserRepository;
 import org.springframework.data.domain.Page;
@@ -33,9 +35,9 @@ public class ScheduleService {
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("해당 id값을 가진 유저 데이터가 존재하지 않습니다."));
 
         // RequestDto -> Entity
-        Schedule schedule = new Schedule(scheduleRequestDTO);
+        Schedule schedule = new Schedule(user, scheduleRequestDTO);
 
-        // User가 Schedule을 생성.
+        // User가 Schedule을 생성.  전달한 user는 일정을 생성한 담당자일뿐아니라 일정과 관련된 유저이기도 함.
         schedule.addUser(user);
 
         // DB 저장
@@ -130,12 +132,12 @@ public class ScheduleService {
 
     // scheduleId 값 -> Schedule 객체 반환.
     public Schedule findByScheduleId(Long scheduleId) {
-        return scheduleRepository.findById(scheduleId).orElseThrow(() -> new RuntimeException("해당 id값을 가진 스케쥴 데이터가 존재하지 않습니다."));
+        return scheduleRepository.findById(scheduleId).orElseThrow(() -> new ScheduleNotFoundByIdException("해당 id값을 가진 스케쥴 데이터가 존재하지 않습니다."));
     }
 
     // userId 값 -> User 객체 반환.
     public User findByUserId(Long userId) {
-        return userRepository.findById(userId).orElseThrow(() -> new RuntimeException("해당 id값을 가진 유저 데이터가 존재하지 않습니다."));
+        return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundByIdException("해당 id값을 가진 유저 데이터가 존재하지 않습니다."));
     }
 
 

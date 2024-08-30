@@ -27,20 +27,17 @@ class CommentRepositoryTest {
     @Rollback(value = false)
     public void createComment() {
         //테스트용 id : 3 를 가진 Schedule이 존재하는 상태.
-        Schedule schedule = scheduleRepository.findById(3L).get();
+        Schedule schedule = scheduleRepository.findById(1L).get();
         System.out.println("Schedule Comment 확인 : " + schedule.getComments().size());
 
         Comment comment = new Comment();
-        comment.setComment("schedule_3 에 대한 코멘트");
-        comment.setUsername("작성자명2");
+        comment.setComment("schedule_1 에 대한 코멘트");
+        comment.setUsername("작성자명1");
         comment.setSchedule(schedule);
-
-        //schedule에도 comment 저장.
-        schedule.addComment(comment);
 
         //Comment 저장
         Comment result = commentRepository.save(comment);               //relation이 제대로 잡혀있으면, 여기 한줄로 가능.
-        Schedule savedSchedule = scheduleRepository.findById(3L).get(); //scheduleRepository.save(schedule);
+        Schedule savedSchedule = scheduleRepository.findById(1L).get(); //scheduleRepository.save(schedule);
 
         //Comment 출력
         System.out.println("Comment 내용 : " + result.getComment());

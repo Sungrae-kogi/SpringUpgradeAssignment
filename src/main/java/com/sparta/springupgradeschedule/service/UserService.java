@@ -3,6 +3,7 @@ package com.sparta.springupgradeschedule.service;
 import com.sparta.springupgradeschedule.dto.user.UserRequestDTO;
 import com.sparta.springupgradeschedule.dto.user.UserResponseDTO;
 import com.sparta.springupgradeschedule.entity.User;
+import com.sparta.springupgradeschedule.exception.UserNotFoundByIdException;
 import com.sparta.springupgradeschedule.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -46,6 +47,6 @@ public class UserService {
     }
 
     public User findById(Long userId) {
-        return userRepository.findById(userId).orElseThrow(() -> new RuntimeException("해당 id값을 가진 유저 데이터가 존재하지 않습니다."));
+        return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundByIdException("해당 id값을 가진 유저 데이터가 존재하지 않습니다."));
     }
 }

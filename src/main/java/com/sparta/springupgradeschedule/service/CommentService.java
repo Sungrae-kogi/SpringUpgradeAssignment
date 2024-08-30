@@ -4,6 +4,8 @@ import com.sparta.springupgradeschedule.dto.comment.CommentRequestDTO;
 import com.sparta.springupgradeschedule.dto.comment.CommentResponseDTO;
 import com.sparta.springupgradeschedule.entity.Comment;
 import com.sparta.springupgradeschedule.entity.Schedule;
+import com.sparta.springupgradeschedule.exception.CommentNotFoundByIdException;
+import com.sparta.springupgradeschedule.exception.ScheduleNotFoundByIdException;
 import com.sparta.springupgradeschedule.repository.CommentRepository;
 import com.sparta.springupgradeschedule.repository.ScheduleRepository;
 import org.springframework.stereotype.Service;
@@ -25,15 +27,12 @@ public class CommentService {
         // scheduleId 값으로 Schedule 검색
         Schedule schedule = findById(scheduleId);
 
-        // DTO -> Entity
+        // DTO -> Entity, comment에 연관된 schedule 설정
         Comment comment = new Comment(commentRequestDTO);
-
-        // Schedule의 List<Comment>에 comment 저장 -> comment에 schedule 정보가 들어가야함. (comment가 어떤 schedule에 종속되어있는지)
-        schedule.addComment(comment);
+        comment.setSchedule(schedule);
 
         // comment 저장, Schedule에도 comment 저장    -> 연관관계가 설정되어있으므로 Schedule의 CommentList도 자동으로 반영.
         Comment savedComment = commentRepository.save(comment);
-
 
         return new CommentResponseDTO(savedComment);
     }
@@ -82,17 +81,17 @@ public class CommentService {
 
     // Schedule_id 값 -> Schedule 객체 반환.
     public Schedule findById(Long scheduleId) {
-        return scheduleRepository.findById(scheduleId).orElseThrow(() -> new RuntimeException("해당 id값을 가진 스케쥴 데이터가 존재하지 않습니다."));
+        return scheduleRepository.findById(scheduleId).orElseThrow(() -> new ScheduleNotFoundByIdException("해당 id값을 가진 스케쥴 데이터가 존재하지 않습니다."));
     }
 
     // Schedule_id 값, Comment_id 값 -> Comment 객체 반환.
     public Comment findByScheduleIdAndCommentId(Long scheduleId, Long commentId) {
         // scheduleId 값으로 Schedule 검색
-        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(() -> new RuntimeException("해당 id값을 가진 스케쥴 데이터가 존재하지 않습니다."));
+        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(() -> new ScheduleNotFoundByIdException("해당 id값을 가진 스케쥴 데이터가 존재하지 않습니다."));
 
         // 검색한 Schedule의 comments에 commentId값으로 Comment 검색
         List<Comment> commentsInSchedule = schedule.getComments();
         return commentsInSchedule.stream().filter(c -> c.getComment_id().equals(commentId))
-                .findFirst().orElseThrow(() -> new RuntimeException("해당 id값을 가진 댓글 데이터가 존재하지 않습니다."));
+                .findFirst().orElseThrow(() -> new CommentNotFoundByIdException("해당 id값을 가진 댓글 데이터가 존재하지 않습니다."));
     }
 }

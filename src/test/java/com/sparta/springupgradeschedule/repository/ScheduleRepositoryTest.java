@@ -5,6 +5,7 @@ import com.sparta.springupgradeschedule.dto.user.UserSmallResponseDTO;
 import com.sparta.springupgradeschedule.entity.Schedule;
 import com.sparta.springupgradeschedule.entity.User;
 import com.sparta.springupgradeschedule.entity.UserSchedule;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,24 +26,29 @@ class ScheduleRepositoryTest {
     @Transactional
     @Rollback(value = false)
     public void createSchedule(){
-        // userId User 검색
+
+        // given
         User user = userRepository.findById(1L).orElseThrow(() -> new RuntimeException("해당 id값을 가진 유저 데이터가 존재하지 않습니다."));
-
-        // RequestDto -> Entity
         Schedule schedule = new Schedule();
-        schedule.setTitle("새벽제목");
-        schedule.setContents("과제5단계왜이럼");
-
-        // User가 Schedule을 생성.
+        schedule.setUser(user);
+        schedule.setTitle("5시 재제출");
+        schedule.setContents("피드백 반영");
         schedule.addUser(user);
 
-        // DB 저장
+        // when
         Schedule savedSchedule = scheduleRepository.save(schedule);
 
+        // then
+        Assertions.assertThat(savedSchedule.getTitle()).isEqualTo("5시 재제출");
+        Assertions.assertThat(savedSchedule.getContents()).isEqualTo("피드백 반영");
+
         List<UserSchedule> userSchedules = savedSchedule.getUserSchedules();
-        for(UserSchedule userSchedule : userSchedules){
-            System.out.println("userSchedule : " + userSchedule);
+        for (UserSchedule userSchedule : userSchedules) {
+            Assertions.assertThat(userSchedule.getUser()).isEqualTo(user);
+            Assertions.assertThat(userSchedule.getSchedule()).isEqualTo(schedule);
         }
+
+
     }
 
     @Test
