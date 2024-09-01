@@ -1,7 +1,6 @@
 package com.sparta.springupgradeschedule.repository;
 
-import com.sparta.springupgradeschedule.dto.schedule.ScheduleResponseDTO;
-import com.sparta.springupgradeschedule.dto.user.UserSmallResponseDTO;
+import com.sparta.springupgradeschedule.dto.user.response.UserSmallResponseDTO;
 import com.sparta.springupgradeschedule.entity.Schedule;
 import com.sparta.springupgradeschedule.entity.User;
 import com.sparta.springupgradeschedule.entity.UserSchedule;

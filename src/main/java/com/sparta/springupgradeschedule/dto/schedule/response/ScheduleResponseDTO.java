@@ -1,13 +1,11 @@
-package com.sparta.springupgradeschedule.dto.schedule;
+package com.sparta.springupgradeschedule.dto.schedule.response;
 
-import com.sparta.springupgradeschedule.dto.user.UserResponseDTO;
-import com.sparta.springupgradeschedule.dto.user.UserSmallResponseDTO;
+import com.sparta.springupgradeschedule.dto.user.response.UserResponseDTO;
+import com.sparta.springupgradeschedule.dto.user.response.UserSmallResponseDTO;
 import com.sparta.springupgradeschedule.entity.Schedule;
-import com.sparta.springupgradeschedule.entity.User;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

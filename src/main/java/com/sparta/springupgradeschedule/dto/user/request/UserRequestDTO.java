@@ -1,4 +1,4 @@
-package com.sparta.springupgradeschedule.dto.user;
+package com.sparta.springupgradeschedule.dto.user.request;
 
 import com.sparta.springupgradeschedule.entity.User;
 import lombok.Getter;

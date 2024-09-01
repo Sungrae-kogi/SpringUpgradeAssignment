@@ -1,4 +1,4 @@
-package com.sparta.springupgradeschedule.dto.comment;
+package com.sparta.springupgradeschedule.dto.comment.response;
 
 import com.sparta.springupgradeschedule.entity.Comment;
 import lombok.Getter;

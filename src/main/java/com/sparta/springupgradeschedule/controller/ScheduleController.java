@@ -1,14 +1,13 @@
 package com.sparta.springupgradeschedule.controller;
 
-import com.sparta.springupgradeschedule.dto.schedule.SchedulePageListResponseDTO;
-import com.sparta.springupgradeschedule.dto.schedule.ScheduleRequestDTO;
-import com.sparta.springupgradeschedule.dto.schedule.ScheduleResponseDTO;
+import com.sparta.springupgradeschedule.dto.schedule.response.SchedulePageListResponseDTO;
+import com.sparta.springupgradeschedule.dto.schedule.request.ScheduleRequestDTO;
+import com.sparta.springupgradeschedule.dto.schedule.response.ScheduleResponseDTO;
 import com.sparta.springupgradeschedule.service.ScheduleService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

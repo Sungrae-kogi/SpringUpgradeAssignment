@@ -1,13 +1,11 @@
 package com.sparta.springupgradeschedule.service;
 
-import com.sparta.springupgradeschedule.dto.schedule.SchedulePageListResponseDTO;
-import com.sparta.springupgradeschedule.dto.schedule.ScheduleRequestDTO;
-import com.sparta.springupgradeschedule.dto.schedule.ScheduleResponseDTO;
-import com.sparta.springupgradeschedule.dto.user.UserResponseDTO;
-import com.sparta.springupgradeschedule.dto.user.UserSmallResponseDTO;
+import com.sparta.springupgradeschedule.dto.schedule.response.SchedulePageListResponseDTO;
+import com.sparta.springupgradeschedule.dto.schedule.request.ScheduleRequestDTO;
+import com.sparta.springupgradeschedule.dto.schedule.response.ScheduleResponseDTO;
+import com.sparta.springupgradeschedule.dto.user.response.UserSmallResponseDTO;
 import com.sparta.springupgradeschedule.entity.Schedule;
 import com.sparta.springupgradeschedule.entity.User;
-import com.sparta.springupgradeschedule.entity.UserSchedule;
 import com.sparta.springupgradeschedule.exception.ScheduleNotFoundByIdException;
 import com.sparta.springupgradeschedule.exception.UserNotFoundByIdException;
 import com.sparta.springupgradeschedule.repository.ScheduleRepository;
@@ -15,7 +13,6 @@ import com.sparta.springupgradeschedule.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;

@@ -1,32 +1,46 @@
 package com.sparta.springupgradeschedule.service;
 
-import com.sparta.springupgradeschedule.dto.user.UserRequestDTO;
-import com.sparta.springupgradeschedule.dto.user.UserResponseDTO;
+import com.sparta.springupgradeschedule.config.JwtUtil;
+import com.sparta.springupgradeschedule.config.PasswordEncoder;
+import com.sparta.springupgradeschedule.dto.user.response.UserResponseDTO;
+import com.sparta.springupgradeschedule.dto.user.request.UserSaveRequestDTO;
+import com.sparta.springupgradeschedule.dto.user.response.UserSaveResponseDTO;
 import com.sparta.springupgradeschedule.entity.User;
 import com.sparta.springupgradeschedule.exception.UserNotFoundByIdException;
 import com.sparta.springupgradeschedule.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
-    public UserResponseDTO createUser(UserRequestDTO userRequestDTO) {
+    public UserSaveResponseDTO createUser(UserSaveRequestDTO userSaveRequestDTO) {
         // RequestDTO -> Entity
-        User user = new User(userRequestDTO);
+        User user = new User(userSaveRequestDTO);
+
+        // 전달받은 비밀번호 암호화
+        String encodedPassword = passwordEncoder.encode(userSaveRequestDTO.getPassword());
+        user.setPassword(encodedPassword);
 
         // DB 저장
         User savedUser = userRepository.save(user);
 
+        // JWT 발급 후 반환
+        String bearerToken = jwtUtil.createToken(
+                savedUser.getUser_id(),
+                savedUser.getUsername(),
+                savedUser.getEmail()
+        );
+
         // Entity -> ResponseDTO 반환
-        return new UserResponseDTO(savedUser);
+        return new UserSaveResponseDTO(bearerToken);
     }
 
     public UserResponseDTO getUser(Long userId) {

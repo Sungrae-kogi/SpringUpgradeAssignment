@@ -1,7 +1,7 @@
 package com.sparta.springupgradeschedule.service;
 
-import com.sparta.springupgradeschedule.dto.comment.CommentRequestDTO;
-import com.sparta.springupgradeschedule.dto.comment.CommentResponseDTO;
+import com.sparta.springupgradeschedule.dto.comment.request.CommentRequestDTO;
+import com.sparta.springupgradeschedule.dto.comment.response.CommentResponseDTO;
 import com.sparta.springupgradeschedule.entity.Comment;
 import com.sparta.springupgradeschedule.entity.Schedule;
 import com.sparta.springupgradeschedule.exception.CommentNotFoundByIdException;

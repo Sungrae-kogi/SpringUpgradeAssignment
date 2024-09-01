@@ -1,7 +1,8 @@
 package com.sparta.springupgradeschedule.controller;
 
-import com.sparta.springupgradeschedule.dto.user.UserRequestDTO;
-import com.sparta.springupgradeschedule.dto.user.UserResponseDTO;
+import com.sparta.springupgradeschedule.dto.user.response.UserResponseDTO;
+import com.sparta.springupgradeschedule.dto.user.request.UserSaveRequestDTO;
+import com.sparta.springupgradeschedule.dto.user.response.UserSaveResponseDTO;
 import com.sparta.springupgradeschedule.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,11 +17,12 @@ public class UserController {
         this.userService = userService;
     }
 
-    // 유저 저장
+    // 유저 저장    - username, email, password
     @PostMapping
-    public UserResponseDTO createUser(@RequestBody UserRequestDTO userRequestDTO) {
-        return userService.createUser(userRequestDTO);
+    public UserSaveResponseDTO createUser(@RequestBody UserSaveRequestDTO userSaveRequestDTO) {
+        return userService.createUser(userSaveRequestDTO);
     }
+
     // 유저 단건 조회
     @GetMapping("/{userId}")
     public UserResponseDTO getUser(@PathVariable Long userId) {

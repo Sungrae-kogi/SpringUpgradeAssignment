@@ -1,7 +1,7 @@
 package com.sparta.springupgradeschedule.controller;
 
-import com.sparta.springupgradeschedule.dto.comment.CommentRequestDTO;
-import com.sparta.springupgradeschedule.dto.comment.CommentResponseDTO;
+import com.sparta.springupgradeschedule.dto.comment.request.CommentRequestDTO;
+import com.sparta.springupgradeschedule.dto.comment.response.CommentResponseDTO;
 import com.sparta.springupgradeschedule.service.CommentService;
 import org.springframework.web.bind.annotation.*;
 

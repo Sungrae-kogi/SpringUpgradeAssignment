@@ -1,6 +1,5 @@
 package com.sparta.springupgradeschedule.repository;
 
-import com.sparta.springupgradeschedule.dto.comment.CommentResponseDTO;
 import com.sparta.springupgradeschedule.entity.Comment;
 import com.sparta.springupgradeschedule.entity.Schedule;
 import jakarta.transaction.Transactional;
@@ -10,9 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 
 import java.util.List;
-import java.util.stream.Collectors;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class CommentRepositoryTest {
