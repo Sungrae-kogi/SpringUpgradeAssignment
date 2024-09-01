@@ -35,5 +35,5 @@
 | 특정 유저 삭제 | DELETE | /api/users/{userId} | 요청 param |          |
 
 ## ERD
+![5](https://github.com/user-attachments/assets/55cdf869-338a-4c47-b9e8-2b001013d2f8)
 
-![3](https://github.com/user-attachments/assets/fe8b4abe-ae95-4327-a466-765209a35ab5)
