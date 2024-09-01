@@ -4,6 +4,13 @@
 
 ## 🆘 API 명세서 - JPA를 활용한 upgrade 일정 관리 앱 서버
 
+### Auth
+
+| 기능       | Method | URL           | Request  | Response |
+|----------|--------|---------------|----------|----------|
+| 회원 가입    | POST   | /auth/signup  | 요청 body  | 등록 정보    |
+| 로그인      | POST   | /auth/signin  | 요청 body  | 등록 정보    |
+
 ### Schedule
 
 | 기능          | Method | URL                                 | Request  | Response |
@@ -29,7 +36,6 @@
 
 | 기능       | Method | URL                 | Request  | Response |
 |----------|--------|---------------------|----------|----------|
-| 유저 등록    | POST   | /api/users          | 요청 body  | 등록 정보    |
 | 특정 유저 조회 | GET    | /api/users/{userId} | 요청 Param | 응답 정보    |
 | 유저 전체 조회 | GET    | /api/users          | 요청 Param | 응답 정보    |
 | 특정 유저 삭제 | DELETE | /api/users/{userId} | 요청 param |          |

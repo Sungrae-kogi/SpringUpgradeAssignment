@@ -1,5 +1,6 @@
 package com.sparta.springupgradeschedule.entity;
 
+import com.sparta.springupgradeschedule.dto.auth.SignupRequestDTO;
 import com.sparta.springupgradeschedule.dto.user.request.UserRequestDTO;
 import com.sparta.springupgradeschedule.dto.user.request.UserSaveRequestDTO;
 import jakarta.persistence.*;
@@ -40,6 +41,12 @@ public class User extends Timestamped {
         this.username = userSaveRequestDTO.getUsername();
         this.email = userSaveRequestDTO.getEmail();
         this.password = userSaveRequestDTO.getPassword();
+    }
+
+    public User(SignupRequestDTO signupRequestDTO) {
+        this.username = signupRequestDTO.getUsername();
+        this.email = signupRequestDTO.getEmail();
+        this.password = signupRequestDTO.getPassword();
     }
 
     //User측에서도 Schedule 등록시 중간다리 객체로 저장.

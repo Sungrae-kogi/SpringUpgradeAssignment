@@ -18,30 +18,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final JwtUtil jwtUtil;
-
-    public UserSaveResponseDTO createUser(UserSaveRequestDTO userSaveRequestDTO) {
-        // RequestDTO -> Entity
-        User user = new User(userSaveRequestDTO);
-
-        // 전달받은 비밀번호 암호화
-        String encodedPassword = passwordEncoder.encode(userSaveRequestDTO.getPassword());
-        user.setPassword(encodedPassword);
-
-        // DB 저장
-        User savedUser = userRepository.save(user);
-
-        // JWT 발급 후 반환
-        String bearerToken = jwtUtil.createToken(
-                savedUser.getUser_id(),
-                savedUser.getUsername(),
-                savedUser.getEmail()
-        );
-
-        // Entity -> ResponseDTO 반환
-        return new UserSaveResponseDTO(bearerToken);
-    }
 
     public UserResponseDTO getUser(Long userId) {
         // 유저 검색

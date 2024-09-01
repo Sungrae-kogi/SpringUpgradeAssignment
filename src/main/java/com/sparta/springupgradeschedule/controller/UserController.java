@@ -17,12 +17,6 @@ public class UserController {
         this.userService = userService;
     }
 
-    // 유저 저장    - username, email, password
-    @PostMapping
-    public UserSaveResponseDTO createUser(@RequestBody UserSaveRequestDTO userSaveRequestDTO) {
-        return userService.createUser(userSaveRequestDTO);
-    }
-
     // 유저 단건 조회
     @GetMapping("/{userId}")
     public UserResponseDTO getUser(@PathVariable Long userId) {

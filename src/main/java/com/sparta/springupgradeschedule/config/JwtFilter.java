@@ -27,26 +27,31 @@ public class JwtFilter implements Filter {
         String url = httpRequest.getRequestURI();
         String method = httpRequest.getMethod();
 
-        // 특정 URL & HTTP 메서드에 대해 필터를 건너뛰도록 설정
-        // POST 요청, /users -> 회원가입 같은 요청에 대해서는 인증이 없어도 접근이 가능해야함.
-        if ("POST".equalsIgnoreCase(method) && "/users".equals(url)) {
+        // url이 /auth면 회원가입, 로그인처리이므로 인증이 필요없다.     - 해설 2:00:59
+        if(url.startsWith("/auth")){
             chain.doFilter(request, response);
             return;
         }
-
+        
+        // name - value 설정했던 JWTvalue를 가져옴. String값이다.
         String bearerJwt = httpRequest.getHeader("Authorization");
 
+        // 존재하지않거나, 접두사가 설정했던 Bearer 가 아니라면 응답에 에러메시지 
         if (bearerJwt == null || !bearerJwt.startsWith("Bearer ")) {
             httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "JWT 토큰이 필요합니다.");
             return;
         }
 
+        // 존재한다면, 접두사를 뗀 value를 가져옴.
         String jwt = jwtUtil.substringToken(bearerJwt);
 
         try {
+            // 접두사를 뗀 토큰을 검증한다.
             if (jwtUtil.validateToken(jwt)) {
+                // 검증성공시 chain.doFilter()로 다음 Filter로 전달
                 chain.doFilter(request, response);
             } else {
+                // 검증실패 -> 유효하지 않은 토큰
                 httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "JWT 토큰이 유효하지 않습니다.");
             }
         } catch (Exception e) {
